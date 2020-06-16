@@ -1,5 +1,15 @@
 (ns zip-viewer.views.actions
-  (:require [zip-viewer.mui :as mui]))
+  (:require
+   [clojure.zip :as zip]
+   [zip-viewer.mui :as mui]))
+
+(def keyword->zip-fn
+  {:left zip/left
+   :right zip/right
+   :up zip/up
+   :down zip/down
+   :replace zip/replace
+   :init zip/vector-zip})
 
 (def pos-arg-actions
   {:init ["inital data structure"]
