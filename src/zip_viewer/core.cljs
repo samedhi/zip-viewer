@@ -18,8 +18,7 @@
   (when-let [el (goog.dom/getElement "app")]
     (reagent.dom/render main-panel el)))
 
-(defn ^:dev/after-load init []
-  (println :init-running)
+(defn ^:after-load init []
   (re-frame/clear-subscription-cache!)
   (re-frame/dispatch-sync [:initialize-db])
   (breakpoints/init)
