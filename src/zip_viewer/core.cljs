@@ -1,22 +1,16 @@
 (ns ^:figwheel-hooks zip-viewer.core
   (:require
    [goog.dom :as goog.dom]
-   [reagent.core :as reagent]
    [reagent.dom :as reagent.dom]
    [re-frame.core :as re-frame]
    [zip-viewer.breakpoints :as breakpoints]
-   [zip-viewer.config :as config]
    [zip-viewer.events :as events]
-   [zip-viewer.mui :as mui]
-   [zip-viewer.subs :as subs]))
-
-(defn main-panel []
-  (let [greeting @(re-frame/subscribe [:greeting])]
-    [mui/container greeting]))
+   [zip-viewer.subs :as subs]
+   [zip-viewer.views.root :as root]))
 
 (defn mount-root []
   (when-let [el (goog.dom/getElement "app")]
-    (reagent.dom/render main-panel el)))
+    (reagent.dom/render root/component el)))
 
 (defn ^:after-load init []
   (re-frame/clear-subscription-cache!)
