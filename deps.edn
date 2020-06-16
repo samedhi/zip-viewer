@@ -1,0 +1,17 @@
+{:deps {
+        breaking-point {:mvn/version "0.1.2"}
+        camel-snake-kebab {:mvn/version "0.4.1"}
+        cljsjs/material-ui {:mvn/version "4.9.12-0"}
+        cljsjs/material-ui-icons {:mvn/version "4.4.1-0"}
+        com.andrewmcveigh/cljs-time {:mvn/version "0.5.2"}
+        com.bhauman/figwheel-main {:mvn/version "0.2.8"}
+        com.bhauman/rebel-readline-cljs {:mvn/version "0.1.4"}
+        org.clojars.samedhi/firemore {:mvn/version "0.6.2"}
+        org.clojure/clojurescript {:mvn/version "1.10.773"}
+        re-frame {:mvn/version "0.12.0"}
+        re-pressed {:mvn/version "0.3.1"}
+        reagent {:mvn/version "1.0.0-alpha1"}
+        org.clojure/clojure {:mvn/version "1.10.1"}
+        }
+ :aliases {:fig {:main-opts ["-m" "figwheel.main"]}}
+ :paths ["src" "resources" "target"]}
