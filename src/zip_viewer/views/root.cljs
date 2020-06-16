@@ -1,7 +1,8 @@
 (ns zip-viewer.views.root
   (:require
    [re-frame.core :as re-frame]
-   [zip-viewer.mui :as mui]))
+   [zip-viewer.mui :as mui]
+   [zip-viewer.views.actions :as actions]))
 
 (defn component []
   (let [greeting @(re-frame/subscribe [:greeting])]
@@ -24,4 +25,5 @@
        {:item true
         :style {:background-color :blue}
         :xs 5}
-       "CCCCCCCCCCCCCCC"]]]))
+       "CCCCCCCCCCCCCCC"]]
+     [actions/component]]))
