@@ -1,6 +1,5 @@
 (ns ^:figwheel-hooks zip-viewer.core
   (:require
-   [firemore.core :as firemore]
    [goog.dom :as goog.dom]
    [reagent.core :as reagent]
    [reagent.dom :as reagent.dom]
@@ -32,7 +31,7 @@
 
 (defn mount-root []
   (when-let [el (goog.dom/getElement "app")]
-    (reagent.dom/render [main-panel] el)))
+    (reagent.dom/render main-panel el)))
 
 (defn ^:dev/after-load init []
   (re-frame/clear-subscription-cache!)
