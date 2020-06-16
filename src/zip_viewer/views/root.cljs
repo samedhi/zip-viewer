@@ -5,7 +5,23 @@
 
 (defn component []
   (let [greeting @(re-frame/subscribe [:greeting])]
-    [mui/grid
-     {:container true
-      :justify "flex-end"}
-     greeting]))
+    [mui/container
+     {:max-width "xl"}
+     [mui/grid
+      {:container true
+       :justify :space-evenly}
+      [mui/grid
+       {:item true
+        :style {:background-color :red}
+        :xs 2}
+       "AAAAAAAAAAAAAAA"]
+      [mui/grid
+       {:item true
+        :style {:background-color :green}
+        :xs 5}
+       "BBBBBBBBBBBBBBB"]
+      [mui/grid
+       {:item true
+        :style {:background-color :blue}
+        :xs 5}
+       "CCCCCCCCCCCCCCC"]]]))
