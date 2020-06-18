@@ -25,16 +25,19 @@
 
 (defn action-component [action]
   (let [arguments (get action->positional-arguments action ["loc"])]
-    [mui/grid
-     {:container true
-      :align-items :center}
-     [mui/typography "(" (name action) " <loc>"]
-     (for [[i argument] (map-indexed vector (rest arguments))]
-       ^{:key i}
-       [mui/text-field {:style {:padding-left "0.5rem"}
-                        :placeholder "Hello"}])
-     [mui/typography
-      ")"]]))
+    [mui/button
+     {:variant "outlined"
+      :style {:text-transform :none}}
+     [mui/grid
+      {:container true
+       :align-items :center}
+      [mui/typography "(" (name action) " <loc>"]
+      (for [[i argument] (map-indexed vector (rest arguments))]
+        ^{:key i}
+        [mui/text-field {:style {:padding-left "0.5rem"}
+                         :placeholder "Hello"}])
+      [mui/typography
+       ")"]]]))
 
 (defn component []
   [mui/grid
@@ -44,7 +47,8 @@
      [mui/grid
       {:container true
        :justify :space-evenly
-       :item true}
+       :item true
+       :style {:padding "0.25rem 0"}}
       (for [col row]
         ^{:key col}
         [mui/grid
