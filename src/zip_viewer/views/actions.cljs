@@ -3,7 +3,7 @@
    [clojure.zip :as zip]
    [zip-viewer.mui :as mui]))
 
-(def keyword->zip-fn
+(def action->zip-fn
   {:left zip/left
    :right zip/right
    :up zip/up
@@ -11,11 +11,11 @@
    :replace zip/replace
    :init zip/vector-zip})
 
-(def pos-arg-actions
+(def action->positional-arguments
   {:init ["inital data structure"]
-   :replace ["value to replace"]})
+   :replace ["loc" "value to replace"]})
 
-(def start-grid
+(def init-grid
   [[:init]])
 
 (def grid
@@ -23,20 +23,32 @@
    [:left :replace :right]
    [:down]])
 
+(defn action-component [action]
+  (let [arguments (get action->positional-arguments action ["loc"])]
+    [mui/grid
+     {:container true
+      :align-items :center}
+     [mui/typography "(" (name action) " <loc>"]
+     (for [[i argument] (map-indexed vector (rest arguments))]
+       ^{:key i}
+       [mui/text-field {:style {:padding-left "0.5rem"}
+                        :placeholder "Hello"}])
+     [mui/typography
+      ")"]]))
+
 (defn component []
   [mui/grid
-   {:container true
-    :style {:background-color :red}}
+   {:container true}
    (for [row grid]
-     ^{:key row}
+     ^{:key (pr-str row)}
      [mui/grid
       {:container true
        :justify :space-evenly
        :item true}
       (for [col row]
         ^{:key col}
-        [mui/typography
-         {:align :center
-          :style {:background-color :green
-                  :min-width "5rem"}}
-         (name col)])])])
+        [mui/grid
+         {:item true
+          :align :center
+          :style {:min-width "5rem"}}
+         (action-component col)])])])
