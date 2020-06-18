@@ -1,19 +1,8 @@
 (ns zip-viewer.views.actions
   (:require
-   [clojure.zip :as zip]
-   [zip-viewer.mui :as mui]))
-
-(def action->zip-fn
-  {:left zip/left
-   :right zip/right
-   :up zip/up
-   :down zip/down
-   :replace zip/replace
-   :init zip/vector-zip})
-
-(def action->positional-arguments
-  {:init ["inital data structure"]
-   :replace ["loc" "value to replace"]})
+   [re-frame.core :as re-frame]
+   [zip-viewer.mui :as mui]
+   [zip-viewer.zip-data :as zip-data]))
 
 (def init-grid
   [[:init]])
@@ -24,7 +13,7 @@
    [:down]])
 
 (defn action-component [action]
-  (let [arguments (get action->positional-arguments action ["loc"])]
+  (let [arguments (get zip-data/action->positional-arguments action ["loc"])]
     [mui/button
      {:variant "outlined"
       :style {:text-transform :none}}
