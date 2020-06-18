@@ -2,10 +2,11 @@
   (:require
    [re-frame.core :as re-frame]
    [zip-viewer.mui :as mui]
+   [zip-viewer.util :as util]
    [zip-viewer.zip-data :as zip-data]))
 
-(def init-grid
-  [[:init]])
+(def constructor-grid
+  [[:vector-zip]])
 
 (def grid
   [[:up]
@@ -13,35 +14,53 @@
    [:down]])
 
 (defn action-component [action]
-  (let [arguments (get zip-data/action->positional-arguments action ["loc"])]
+  (let [arguments (zip-data/action->positional-arguments action)
+        constructor? (contains? zip-data/constructors action)]
     [mui/button
      {:variant "outlined"
       :style {:text-transform :none}}
      [mui/grid
       {:container true
-       :align-items :center}
-      [mui/typography "(" (name action) " <loc>"]
-      (for [[i argument] (map-indexed vector (rest arguments))]
-        ^{:key i}
-        [mui/text-field {:style {:padding-left "0.5rem"}
-                         :placeholder argument}])
+       :align-items :center
+       :on-click #(re-frame/dispatch [action])}
+      [mui/typography "(" (name action) (when-not constructor? " <loc> ")]
+      (doall
+       (for [[i argument] (map-indexed vector arguments)]
+         ^{:key i}
+         [mui/text-field {:style {:padding-left "0.5rem"}
+                          :placeholder argument
+                          :on-change #(let [v (util/evt->value %)]
+                                        (re-frame/dispatch [:set-argument-value action i v]))
+                          :value @(re-frame/subscribe [:argument-value action i])}]))
       [mui/typography
        ")"]]]))
 
-(defn component []
+(defn render-actions [grid]
   [mui/grid
    {:container true}
-   (for [row grid]
-     ^{:key (pr-str row)}
-     [mui/grid
-      {:container true
-       :justify :space-evenly
-       :item true
-       :style {:padding "0.25rem 0"}}
-      (for [col row]
-        ^{:key col}
-        [mui/grid
-         {:item true
-          :align :center
-          :style {:min-width "5rem"}}
-         (action-component col)])])])
+   (doall
+    (for [row grid]
+      ^{:key (pr-str row)}
+      [mui/grid
+       {:container true
+        :justify :space-evenly
+        :item true
+        :style {:padding "0.25rem 0"}}
+       (doall
+        (for [col row]
+          ^{:key col}
+          [mui/grid
+           {:item true
+            :align :center
+            :style {:min-width "5rem"}}
+           (action-component col)]))]))])
+
+(defn contructor-view-component []
+  [:div "CONTRUCTOR VIEW COMPONENT"])
+
+(defn component []
+  (let [we-have-a-loc? (not @(re-frame/subscribe [:loc-empty?]))]
+    [render-actions
+     (if we-have-a-loc?
+       grid
+       constructor-grid)]))

@@ -7,4 +7,5 @@
                  :large-monitor     ]
    :debounce-ms 166})
 
-(def default-db {:greeting "Welcome to the zip-viewer app!"})
+(def default-db
+  {:locs []})

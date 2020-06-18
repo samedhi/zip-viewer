@@ -7,8 +7,11 @@
    :up zip/up
    :down zip/down
    :replace zip/replace
-   :init zip/vector-zip})
+   :vector-zip zip/vector-zip})
 
 (def action->positional-arguments
-  {:init ["value"]
-   :replace [:loc "value"]})
+  {:vector-zip ["value"]
+   :replace ["value"]})
+
+(def constructors
+  #{:vector-zip})
