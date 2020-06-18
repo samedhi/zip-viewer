@@ -24,7 +24,7 @@
       (for [[i argument] (map-indexed vector (rest arguments))]
         ^{:key i}
         [mui/text-field {:style {:padding-left "0.5rem"}
-                         :placeholder "Hello"}])
+                         :placeholder argument}])
       [mui/typography
        ")"]]]))
 

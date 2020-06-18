@@ -10,5 +10,5 @@
    :init zip/vector-zip})
 
 (def action->positional-arguments
-  {:init ["inital data structure"]
-   :replace [:loc "value to replace"]})
+  {:init ["value"]
+   :replace [:loc "value"]})
