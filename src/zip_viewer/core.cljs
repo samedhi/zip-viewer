@@ -14,10 +14,11 @@
 
 (defn ^:after-load init []
   (re-frame/clear-subscription-cache!)
-  (re-frame/dispatch-sync [:initialize-db])
   (breakpoints/init)
   (mount-root)
   :success)
 
 (defonce run-at-app-startup
-  (init))
+  (do
+    (re-frame/dispatch-sync [:initialize-db])
+    (init)))
