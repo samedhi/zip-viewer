@@ -21,11 +21,11 @@
      {:variant "outlined"
       :style {:text-transform :none}
       :color (if can-be-clicked? :primary :default)
-      :disable-ripple (not can-be-clicked?)}
+      :disable-ripple (not can-be-clicked?)
+      :on-click (when can-be-clicked? #(re-frame/dispatch [action]))}
      [mui/grid
       {:container true
-       :align-items :center
-       :on-click #(re-frame/dispatch [action])}
+       :align-items :center}
       [mui/typography "(" (name action) (when-not constructor? " <loc> ")]
       (doall
        (for [[i argument] (map-indexed vector arguments)]

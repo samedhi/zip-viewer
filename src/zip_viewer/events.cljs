@@ -34,7 +34,7 @@
    (fn [db _]
      (let [{:keys [locs inputs]} db
            loc (peek locs)
-           arguments (get inputs action)
+           arguments (->> inputs action (mapv :parsed))
            new-loc (apply fx loc arguments)
            new-loc-with-action (save-the-action new-loc action arguments)]
        (-> (update db :locs conj new-loc-with-action)
