@@ -4,6 +4,11 @@
    [zip-viewer.zip-data :as zip-data]))
 
 (re-frame/reg-sub
+ :locs
+ (fn [db _]
+   (:locs db)))
+
+(re-frame/reg-sub
  :loc-empty?
  (fn [db _]
    (-> db :locs empty?)))
