@@ -10,6 +10,9 @@
  (fn [_ _]
    config/default-db))
 
+(defn clear-inputs [db]
+  (dissoc db :inputs))
+
 (doseq [[action fx] (reduce dissoc zip-data/action->zip-fn zip-data/constructors)
         :let [positional-arguments (zip-data/action->positional-arguments action)]]
   (re-frame/reg-event-db
@@ -19,7 +22,8 @@
            loc (peek locs)
            arguments (get inputs action)
            new-loc (apply fx loc arguments)]
-       (update db :locs conj new-loc)))))
+       (-> (update db :locs conj new-loc)
+           clear-inputs)))))
 
 (re-frame/reg-event-db
  :vector-zip
@@ -29,7 +33,8 @@
          new-loc (apply (:vector-zip zip-data/action->zip-fn) arguments)]
      (if (-> arguments first nil?)
        (do (println "Invalid Arguments: " arguments) db)
-       (assoc db :locs [new-loc])))))
+       (-> (assoc db :locs [new-loc])
+           clear-inputs)))))
 
 (defn try-to-read-string [v]
   (try
