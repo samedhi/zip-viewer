@@ -22,7 +22,9 @@
       :style {:text-transform :none}
       :color (if can-be-clicked? :primary :default)
       :disable-ripple (not can-be-clicked?)
-      :on-click (when can-be-clicked? #(re-frame/dispatch [action]))}
+      :on-click (when can-be-clicked? #(re-frame/dispatch [action]))
+      :on-mouse-enter #(re-frame/dispatch [:enter-hover-action action])
+      :on-mouse-leave #(re-frame/dispatch [:leave-hover-action action])}
      [mui/grid
       {:container true
        :align-items :center}

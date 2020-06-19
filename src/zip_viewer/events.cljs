@@ -77,3 +77,15 @@
        (ensure-argument-vector action)
        (assoc-in [:inputs action i :raw] value)
        (attempt-to-parse-value action i value))))
+
+(re-frame/reg-event-db
+ :enter-hover-action
+ (fn [db [_ action]]
+   (assoc db :action-hover action)))
+
+(re-frame/reg-event-db
+ :leave-hover-action
+ (fn [db [_ action]]
+   (if (= action (:action-hover db))
+     (dissoc db :action-hover)
+     db)))
