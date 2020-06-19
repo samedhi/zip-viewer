@@ -16,9 +16,7 @@
 (re-frame/reg-sub
  :argument-value
  (fn [db [_ action i]]
-   (if-let [v (get-in db [:inputs action i :raw])]
-     (do (println "v is " v) v)
-     (println "v was nil"))))
+   (get-in db [:inputs action i :raw])))
 
 (re-frame/reg-sub
  :can-be-clicked?

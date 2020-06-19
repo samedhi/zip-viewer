@@ -73,7 +73,6 @@
 (re-frame/reg-event-db
  :set-argument-value
  (fn [db [_ action i value]]
-   (println :set-argument-value)
    (-> db
        (ensure-argument-vector action)
        (assoc-in [:inputs action i :raw] value)
