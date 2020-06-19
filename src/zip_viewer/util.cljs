@@ -12,5 +12,5 @@
        " "
        (when-not (contains? zip-data/constructors action) "<loc>")
        (when-not (empty? arguments) " ")
-       (string/join " " arguments)
+       (string/join " " (map #(if (nil? %) "nil" %) arguments))
        ")"))

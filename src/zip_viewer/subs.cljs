@@ -1,7 +1,17 @@
 (ns zip-viewer.subs
   (:require
    [re-frame.core :as re-frame]
-   [zip-viewer.zip-data :as zip-data]))
+   [zip-viewer.zip-data :as zip-data]
+   [zip-viewer.util :as util]))
+
+(re-frame/reg-sub
+ :preview-action-str
+ (fn [db _]
+   (let [{:keys [action-hover inputs]} db]
+     (when action-hover
+       (util/build-action-str
+        action-hover
+        (->> inputs action-hover (mapv :parsed)))))))
 
 (re-frame/reg-sub
  :locs
