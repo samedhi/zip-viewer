@@ -1,9 +1,9 @@
 (ns zip-viewer.events
   (:require
    [cljs.reader :as reader]
-   [clojure.string :as string]
    [re-frame.core :as re-frame]
    [zip-viewer.config :as config]
+   [zip-viewer.util :as util]
    [zip-viewer.zip-data :as zip-data]))
 
 (re-frame/reg-event-db
@@ -19,13 +19,7 @@
     loc
     (assoc (meta loc)
            :action-str
-           (str "("
-                (name action)
-                " "
-                (when-not (contains? zip-data/constructors action) "<loc>")
-                (when-not (empty? arguments) " ")
-                (string/join " " arguments)
-                ")"))))
+           (util/build-action-str action arguments))))
 
 (doseq [[action fx] (reduce dissoc zip-data/action->zip-fn zip-data/constructors)
         :let [positional-arguments (zip-data/action->positional-arguments action)]]
