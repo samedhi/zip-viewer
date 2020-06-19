@@ -18,9 +18,10 @@
    [mui/table
     {:size :small}
     [mui/table-head
-     [mui/table-cell "Action"]
-     [mui/table-cell "Focus"]
-     [mui/table-cell "Loc"]]
+     [mui/table-row
+      [mui/table-cell "Action"]
+      [mui/table-cell "Focus"]
+      [mui/table-cell "Loc"]]]
     [mui/table-body
      (for [[i loc] (map-indexed vector @(re-frame/subscribe [:locs]))]
        ^{:key i}
