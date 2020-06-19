@@ -24,11 +24,12 @@
 (re-frame/reg-event-db
  :vector-zip
  (fn [db _]
-   (println :vector-zip)
    (let [{:keys [locs inputs]} db
-         arguments (get inputs :vector-zip)
+         arguments (->> inputs :vector-zip (mapv :parsed))
          new-loc (apply (:vector-zip zip-data/action->zip-fn) arguments)]
-     (assoc db :locs [new-loc]))))
+     (if (-> arguments first nil?)
+       (do (println "Invalid Arguments: " arguments) db)
+       (assoc db :locs [new-loc])))))
 
 (defn try-to-read-string [v]
   (try
@@ -46,7 +47,7 @@
 (defn attempt-to-parse-value [db action i value]
   (if-let [v (try-to-read-string value)]
     (assoc-in db [:inputs action i :parsed] v)
-    (dissoc db :parsed)))
+    (update-in db [:inputs action i] dissoc :parsed)))
 
 (re-frame/reg-event-db
  :set-argument-value

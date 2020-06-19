@@ -15,10 +15,13 @@
 
 (defn action-component [action]
   (let [arguments (zip-data/action->positional-arguments action)
-        constructor? (contains? zip-data/constructors action)]
+        constructor? (contains? zip-data/constructors action)
+        can-be-clicked? @(re-frame/subscribe [:can-be-clicked? action])]
     [mui/button
      {:variant "outlined"
-      :style {:text-transform :none}}
+      :style {:text-transform :none}
+      :color (if can-be-clicked? :primary :default)
+      :disable-ripple (not can-be-clicked?)}
      [mui/grid
       {:container true
        :align-items :center
