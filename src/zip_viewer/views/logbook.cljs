@@ -15,7 +15,7 @@
        {:item true
         :style {:background-color :red}
         :xs 2}
-       "AAAAAAAAAAAAAAA"]
+       (-> loc meta :action-str)]
       [mui/grid
        {:item true
         :style {:background-color :green}

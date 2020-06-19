@@ -1,6 +1,7 @@
 (ns zip-viewer.events
   (:require
    [cljs.reader :as reader]
+   [clojure.string :as string]
    [re-frame.core :as re-frame]
    [zip-viewer.config :as config]
    [zip-viewer.zip-data :as zip-data]))
@@ -13,6 +14,19 @@
 (defn clear-inputs [db]
   (dissoc db :inputs))
 
+(defn save-the-action [loc action arguments]
+  (with-meta
+    loc
+    (assoc (meta loc)
+           :action-str
+           (str "("
+                (name action)
+                " "
+                (when-not (contains? zip-data/constructors action) "<loc>")
+                (when-not (empty? arguments) " ")
+                (string/join " " arguments)
+                ")"))))
+
 (doseq [[action fx] (reduce dissoc zip-data/action->zip-fn zip-data/constructors)
         :let [positional-arguments (zip-data/action->positional-arguments action)]]
   (re-frame/reg-event-db
@@ -21,8 +35,9 @@
      (let [{:keys [locs inputs]} db
            loc (peek locs)
            arguments (get inputs action)
-           new-loc (apply fx loc arguments)]
-       (-> (update db :locs conj new-loc)
+           new-loc (apply fx loc arguments)
+           new-loc-with-action (save-the-action new-loc action arguments)]
+       (-> (update db :locs conj new-loc-with-action)
            clear-inputs)))))
 
 (re-frame/reg-event-db
@@ -30,10 +45,11 @@
  (fn [db _]
    (let [{:keys [locs inputs]} db
          arguments (->> inputs :vector-zip (mapv :parsed))
-         new-loc (apply (:vector-zip zip-data/action->zip-fn) arguments)]
+         new-loc (apply (:vector-zip zip-data/action->zip-fn) arguments)
+         new-loc-with-action (save-the-action new-loc :vector-zip arguments)]
      (if (-> arguments first nil?)
        (do (println "Invalid Arguments: " arguments) db)
-       (-> (assoc db :locs [new-loc])
+       (-> (assoc db :locs [new-loc-with-action])
            clear-inputs)))))
 
 (defn try-to-read-string [v]
