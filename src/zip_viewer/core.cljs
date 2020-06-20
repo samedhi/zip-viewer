@@ -21,4 +21,5 @@
 (defonce run-at-app-startup
   (do
     (re-frame/dispatch-sync [:initialize-db])
+    (re-frame/dispatch-sync [:set-up-inputs])
     (init)))

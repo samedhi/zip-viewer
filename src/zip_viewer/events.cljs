@@ -4,15 +4,13 @@
    [re-frame.core :as re-frame]
    [zip-viewer.config :as config]
    [zip-viewer.util :as util]
-   [zip-viewer.zip-data :as zip-data]))
+   [zip-viewer.zip-data :as zip-data]
+   [clojure.zip :as zip]))
 
 (re-frame/reg-event-db
  :initialize-db
  (fn [_ _]
    config/default-db))
-
-(defn clear-inputs [db]
-  (dissoc db :inputs))
 
 (defn save-the-action [loc action arguments]
   (with-meta
@@ -20,6 +18,26 @@
     (assoc (meta loc)
            :action-str
            (util/build-action-str action arguments))))
+
+(defn try-to-read-string [v]
+  (try
+    (reader/read-string v)
+    (catch js/Object o)))
+
+(defn ensure-argument-vector [inputs action]
+  (assoc inputs
+         action
+         (vec
+          (take (count (zip-data/action->positional-arguments action))
+                (repeat {})))))
+
+(defn build-initial-inputs []
+  (reduce ensure-argument-vector
+          {}
+          (keys zip-data/action->positional-arguments)))
+
+(defn clear-inputs [db]
+  (assoc db :inputs (build-initial-inputs)))
 
 (doseq [[action fx] (reduce dissoc zip-data/action->zip-fn zip-data/constructors)
         :let [positional-arguments (zip-data/action->positional-arguments action)]]
@@ -46,18 +64,10 @@
        (-> (assoc db :locs [new-loc-with-action])
            clear-inputs)))))
 
-(defn try-to-read-string [v]
-  (try
-    (reader/read-string v)
-    (catch js/Object o)))
-
-(defn ensure-argument-vector [db action]
-  (if (-> db :inputs action)
-    db
-    (assoc-in db [:inputs action]
-              (vec
-               (take (count (zip-data/action->positional-arguments action))
-                     (repeat {}))))))
+(re-frame/reg-event-db
+ :set-up-inputs
+ (fn [db _]
+   (assoc db :inputs (build-initial-inputs))))
 
 (defn attempt-to-parse-value [db action i value]
   (if-let [v (try-to-read-string value)]
@@ -68,7 +78,6 @@
  :set-argument-value
  (fn [db [_ action i value]]
    (-> db
-       (ensure-argument-vector action)
        (assoc-in [:inputs action i :raw] value)
        (attempt-to-parse-value action i value))))
 
