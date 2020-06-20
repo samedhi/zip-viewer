@@ -13,32 +13,54 @@
    [:left :replace :right]
    [:down]])
 
-(defn action-component [action]
-  (let [arguments (zip-data/action->positional-arguments action)
-        constructor? (contains? zip-data/constructors action)
-        can-be-clicked? @(re-frame/subscribe [:can-be-clicked? action])]
+(defn action-button [options]
+  (let [{:keys [action constructor? can-be-clicked? variant]} options
+        action-str @(re-frame/subscribe [:action-str action])]
     [mui/button
-     {:variant "outlined"
+     {:full-width true
+      :variant variant
       :style {:text-transform :none}
       :color (if can-be-clicked? :primary :default)
-      :disable-ripple (not can-be-clicked?)
+      :disabled (not can-be-clicked?)
       :on-click (when can-be-clicked? #(re-frame/dispatch [action]))
       :on-mouse-enter #(re-frame/dispatch [:enter-hover-action action])
       :on-mouse-leave #(re-frame/dispatch [:leave-hover-action action])}
-     [mui/grid
-      {:container true
-       :align-items :center}
-      [mui/typography "(" (name action) (when-not constructor? " <loc> ")]
-      (doall
-       (for [[i argument] (map-indexed vector arguments)]
-         ^{:key i}
-         [mui/text-field {:style {:padding-left "0.5rem"}
-                          :placeholder argument
-                          :on-change #(let [v (util/evt->value %)]
-                                        (re-frame/dispatch [:set-argument-value action i v]))
-                          :value @(re-frame/subscribe [:argument-value action i])}]))
-      [mui/typography
-       ")"]]]))
+     [mui/typography action-str]]))
+
+(defn action-with-no-arguments [options]
+  [action-button (assoc options :variant "outlined")])
+
+(defn action-with-arguments [options]
+  (let [{:keys [action arguments can-be-clicked?]} options]
+    [mui/grid
+     {:container true
+      :direction :column}
+     [mui/paper
+      {:variant :outlined
+       :style (when can-be-clicked? {:border "1px solid rgba(63, 81, 181, 0.5)"})}
+      [action-button (assoc options :variant "text")]
+      [mui/divider]
+      [mui/grid
+       (doall
+        (for [[i argument] (map-indexed vector arguments)]
+          ^{:key i}
+          [mui/text-field {:style {:padding "0.5rem"}
+                           :placeholder argument
+                           :on-change #(let [v (util/evt->value %)]
+                                         (re-frame/dispatch [:set-argument-value action i v]))
+                           :value @(re-frame/subscribe [:argument-value action i])}]))]]]))
+
+(defn action-component [action]
+  (let [arguments (zip-data/action->positional-arguments action)
+        constructor? (contains? zip-data/constructors action)
+        can-be-clicked? @(re-frame/subscribe [:can-be-clicked? action])
+        options {:action action
+                 :arguments arguments
+                 :contructor? constructor?
+                 :can-be-clicked? can-be-clicked?}]
+    (if (seq arguments)
+      [action-with-arguments options]
+      [action-with-no-arguments options])))
 
 (defn render-actions [grid]
   [mui/grid

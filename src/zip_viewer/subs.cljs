@@ -4,14 +4,23 @@
    [zip-viewer.zip-data :as zip-data]
    [zip-viewer.util :as util]))
 
+(defn build-action-string [action inputs]
+  (when action
+    (util/build-action-str
+     action
+     (->> inputs action (mapv :parsed)))))
+
 (re-frame/reg-sub
  :preview-action-str
  (fn [db _]
    (let [{:keys [action-hover inputs]} db]
-     (when action-hover
-       (util/build-action-str
-        action-hover
-        (->> inputs action-hover (mapv :parsed)))))))
+     (build-action-string action-hover inputs))))
+
+(re-frame/reg-sub
+ :action-str
+ (fn [db [_ action]]
+   (let [{:keys [inputs]} db]
+     (build-action-string action inputs))))
 
 (re-frame/reg-sub
  :locs
