@@ -39,6 +39,14 @@
 (defn clear-inputs [db]
   (assoc db :inputs (build-initial-inputs)))
 
+(defn conj-new-loc [db new-loc]
+  (let [{:keys [index]} db]
+    (-> db
+        (update :locs subvec 0 index)
+        (update :locs conj new-loc)
+        (update :index inc)
+        clear-inputs)))
+
 (doseq [[action fx] (reduce dissoc zip-data/action->zip-fn zip-data/constructors)
         :let [positional-arguments (zip-data/action->positional-arguments action)]]
   (re-frame/reg-event-db
@@ -49,8 +57,7 @@
            arguments (->> inputs action (mapv :parsed))
            new-loc (apply fx loc arguments)
            new-loc-with-action (save-the-action new-loc action arguments)]
-       (-> (update db :locs conj new-loc-with-action)
-           clear-inputs)))))
+       (conj-new-loc db new-loc-with-action)))))
 
 (re-frame/reg-event-db
  :vector-zip
@@ -59,10 +66,7 @@
          arguments (->> inputs :vector-zip (mapv :parsed))
          new-loc (apply (:vector-zip zip-data/action->zip-fn) arguments)
          new-loc-with-action (save-the-action new-loc :vector-zip arguments)]
-     (if (-> arguments first nil?)
-       (do (println "Invalid Arguments: " arguments) db)
-       (-> (assoc db :locs [new-loc-with-action])
-           clear-inputs)))))
+     (conj-new-loc db new-loc-with-action))))
 
 (re-frame/reg-event-db
  :set-up-inputs

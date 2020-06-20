@@ -8,4 +8,5 @@
    :debounce-ms 166})
 
 (def default-db
-  {:locs []})
+  {:locs []
+   :index 0})
