@@ -52,8 +52,8 @@
   (re-frame/reg-event-db
    action
    (fn [db _]
-     (let [{:keys [locs inputs]} db
-           loc (peek locs)
+     (let [{:keys [locs inputs index]} db
+           loc (nth locs (dec index))
            arguments (->> inputs action (mapv :parsed))
            new-loc (apply fx loc arguments)
            new-loc-with-action (save-the-action new-loc action arguments)]
