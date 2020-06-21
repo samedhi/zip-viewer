@@ -69,6 +69,11 @@
      (conj-new-loc db new-loc-with-action))))
 
 (re-frame/reg-event-db
+ :set-index
+ (fn [db [_ i]]
+   (assoc db :index i)))
+
+(re-frame/reg-event-db
  :set-up-inputs
  (fn [db _]
    (assoc db :inputs (build-initial-inputs))))
