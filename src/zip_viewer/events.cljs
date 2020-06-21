@@ -44,6 +44,9 @@
  (fn [db _]
    (assoc db :inputs (build-initial-inputs))))
 
+(defn clear-action-hover [db]
+  (dissoc db :action-hover))
+
 (defn conj-new-loc [db new-loc]
   (let [{:keys [index]} db
         new-index (inc index)]
@@ -51,7 +54,8 @@
         (update :log subvec 0 new-index)
         (update :log conj {:loc new-loc})
         (assoc :index new-index)
-        clear-inputs)))
+        clear-inputs
+        clear-action-hover)))
 
 (doseq [[action fx] (reduce dissoc zip-data/action->zip-fn zip-data/constructors)
         :let [positional-arguments (zip-data/action->positional-arguments action)]]
