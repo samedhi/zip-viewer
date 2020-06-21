@@ -47,7 +47,7 @@
        {:style {:font-weight :inherit
                 :color :inherit
                 :border-bottom "0"}}
-       "***"]]
+       (pr-str (zip/root loc))]]
      [row-drawer opened? loc]]))
 
 (defn preview-row []
@@ -69,7 +69,7 @@
         [mui/table-cell ""]
         [mui/table-cell "Action"]
         [mui/table-cell "Focus"]
-        [mui/table-cell "Loc"]]]
+        [mui/table-cell "Root"]]]
       [mui/table-body
        (for [[i {:keys [loc action-string]}] (map-indexed vector @(re-frame/subscribe [:log]))]
          ^{:key i}
