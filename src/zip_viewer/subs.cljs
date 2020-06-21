@@ -33,14 +33,14 @@
      (build-action-string action inputs))))
 
 (re-frame/reg-sub
- :locs
+ :log
  (fn [db _]
-   (:locs db)))
+   (:log db)))
 
 (re-frame/reg-sub
- :loc-empty?
+ :log-empty?
  (fn [db _]
-   (-> db :locs empty?)))
+   (-> db :log empty?)))
 
 (re-frame/reg-sub
  :argument-value

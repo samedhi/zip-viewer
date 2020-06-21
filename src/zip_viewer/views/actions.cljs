@@ -82,11 +82,8 @@
             :style {:min-width "5rem"}}
            (action-component col)]))]))])
 
-(defn contructor-view-component []
-  [:div "CONTRUCTOR VIEW COMPONENT"])
-
 (defn component []
-  (let [we-have-a-loc? (not @(re-frame/subscribe [:loc-empty?]))]
+  (let [we-have-a-loc? (not @(re-frame/subscribe [:log-empty?]))]
     [render-actions
      (if we-have-a-loc?
        grid

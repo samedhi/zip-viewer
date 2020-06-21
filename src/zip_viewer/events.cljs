@@ -39,12 +39,17 @@
 (defn clear-inputs [db]
   (assoc db :inputs (build-initial-inputs)))
 
+(re-frame/reg-event-db
+ :set-up-inputs
+ (fn [db _]
+   (assoc db :inputs (build-initial-inputs))))
+
 (defn conj-new-loc [db new-loc]
   (let [{:keys [index]} db
         new-index (inc index)]
     (-> db
-        (update :locs subvec 0 new-index)
-        (update :locs conj new-loc)
+        (update :log subvec 0 new-index)
+        (update :log conj {:loc new-loc})
         (assoc :index new-index)
         clear-inputs)))
 
@@ -53,8 +58,8 @@
   (re-frame/reg-event-db
    action
    (fn [db _]
-     (let [{:keys [locs inputs index]} db
-           loc (nth locs index)
+     (let [{:keys [inputs index]} db
+           loc (get-in db [:log index :loc])
            arguments (->> inputs action (mapv :parsed))
            new-loc (apply fx loc arguments)
            new-loc-with-action (save-the-action new-loc action arguments)]
@@ -63,7 +68,7 @@
 (re-frame/reg-event-db
  :vector-zip
  (fn [db _]
-   (let [{:keys [locs inputs]} db
+   (let [{:keys [inputs]} db
          arguments (->> inputs :vector-zip (mapv :parsed))
          new-loc (apply (:vector-zip zip-data/action->zip-fn) arguments)
          new-loc-with-action (save-the-action new-loc :vector-zip arguments)]
@@ -78,11 +83,6 @@
  :flip-opened
  (fn [db [_ i]]
    (println "I would have flipped this arrow")))
-
-(re-frame/reg-event-db
- :set-up-inputs
- (fn [db _]
-   (assoc db :inputs (build-initial-inputs))))
 
 (defn attempt-to-parse-value [db action i value]
   (if-let [v (try-to-read-string value)]
