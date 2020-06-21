@@ -11,6 +11,11 @@
      (->> inputs action (mapv :parsed)))))
 
 (re-frame/reg-sub
+ :index
+ (fn [db _]
+   (:index db)))
+
+(re-frame/reg-sub
  :preview-action-str
  (fn [db _]
    (let [{:keys [action-hover inputs]} db]
