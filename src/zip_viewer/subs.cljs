@@ -16,6 +16,11 @@
    (:index db)))
 
 (re-frame/reg-sub
+ :opened
+ (fn [db _]
+   false))
+
+(re-frame/reg-sub
  :preview-action-str
  (fn [db _]
    (let [{:keys [action-hover inputs]} db]

@@ -29,6 +29,7 @@
 (def checkbox  (mui->reagent "Checkbox"))
 (def chip  (mui->reagent "Chip"))
 (def circular-progress  (mui->reagent "CircularProgress"))
+(def collapse (mui->reagent "Collapse"))
 (def container (mui->reagent "Container"))
 (def dialog  (mui->reagent "Dialog"))
 (def divider  (mui->reagent "Divider"))

@@ -10,3 +10,5 @@
     (js/console.error "Was unable to get MaterialUI icon '" icon-name "'")))
 
 (def add (mui->reagent "Add"))
+(def keyboard-arrow-up (mui->reagent "KeyboardArrowUp"))
+(def keyboard-arrow-down (mui->reagent "KeyboardArrowDown"))

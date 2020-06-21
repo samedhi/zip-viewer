@@ -74,6 +74,11 @@
    (assoc db :index i)))
 
 (re-frame/reg-event-db
+ :flip-opened
+ (fn [db [_ i]]
+   (println "I would have flipped this arrow")))
+
+(re-frame/reg-event-db
  :set-up-inputs
  (fn [db _]
    (assoc db :inputs (build-initial-inputs))))
