@@ -5,35 +5,50 @@
    [zip-viewer.mui :as mui]
    [zip-viewer.mui-icons :as mui-icons]))
 
+(defn row-drawer [opened? loc]
+  [mui/table-row
+   [mui/table-cell {:col-span 4 :style {:padding-bottom 0 :padding-top 0}}
+    [mui/collapse {:in opened? :timeout :auto :unmount-on-exit true}
+     [:pre {:class "code-block"
+            :style {:padding "1rem"}}
+      (with-out-str (cljs.pprint/pprint loc))]]]])
+
 (defn row-component [i relative-to-index action-string loc]
   (let [opened? @(re-frame/subscribe [:opened i])]
-    [mui/table-row
-     {:hover true
-      :on-click #(re-frame/dispatch [:set-index i])
-      :style
-      (condp = relative-to-index
-        -1 {:color :gray}
-        0  {:font-weight :bold}
-        1  nil)}
-     [mui/table-cell
-      [mui/icon-button
-       {:size :small
-        :on-click #(re-frame/dispatch [:flip-opened i])}
-       (if opened?
-         [mui-icons/keyboard-arrow-up]
-         [mui-icons/keyboard-arrow-down])]]
-     [mui/table-cell
-      {:style {:font-weight :inherit
-               :color :inherit}}
-      action-string]
-     [mui/table-cell
-      {:style {:font-weight :inherit
-               :color :inherit}}
-      (pr-str (zip/node loc))]
-     [mui/table-cell
-      {:style {:font-weight :inherit
-               :color :inherit}}
-      (pr-str loc)]]))
+    [:<>
+     [mui/table-row
+      {:hover true
+       :on-click #(re-frame/dispatch [:set-index i])
+       :style
+       (merge
+        (condp = relative-to-index
+          -1 {:color :gray}
+          0  {:font-weight :bold}
+          1  nil))}
+      [mui/table-cell
+       {:style {:border-bottom "0"}}
+       [mui/icon-button
+        {:size :small
+         :on-click #(re-frame/dispatch [:flip-opened i])}
+        (if opened?
+          [mui-icons/keyboard-arrow-up]
+          [mui-icons/keyboard-arrow-down])]]
+      [mui/table-cell
+       {:style {:font-weight :inherit
+                :color :inherit
+                :border-bottom "0"}}
+       action-string]
+      [mui/table-cell
+       {:style {:font-weight :inherit
+                :color :inherit
+                :border-bottom "0"}}
+       (pr-str (zip/node loc))]
+      [mui/table-cell
+       {:style {:font-weight :inherit
+                :color :inherit
+                :border-bottom "0"}}
+       "***"]]
+     [row-drawer opened? loc]]))
 
 (defn preview-row []
   (let [action-string @(re-frame/subscribe [:preview-action-str])]
