@@ -9,11 +9,17 @@
    :up zip/up
    :down zip/down
    :replace zip/replace
-   :vector-zip zip/vector-zip})
+   :seq-zip zip/seq-zip
+   :vector-zip zip/vector-zip
+   :xml-zip zip/xml-zip})
 
 (def action->positional-arguments
-  {:vector-zip ["value"]
-   :replace ["value"]})
+  {:replace ["value"]
+   :seq-zip ["value"]
+   :vector-zip ["value"]
+   :xml-zip ["value"]})
 
 (def constructors
-  #{:vector-zip})
+  #{:seq-zip
+    :vector-zip
+    :xml-zip})

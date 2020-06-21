@@ -66,15 +66,17 @@
            (conj-new-loc new-loc)
            (save-the-action action arguments))))))
 
-(re-frame/reg-event-db
- :vector-zip
- (fn [db _]
-   (let [{:keys [inputs]} db
-         arguments (->> inputs :vector-zip (mapv :parsed))
-         new-loc (apply (:vector-zip zip-data/action->zip-fn) arguments)]
-     (-> db
-         (conj-new-loc new-loc)
-         (save-the-action :vector-zip arguments)))))
+(doseq [action zip-data/constructors
+        :let [positional-arguments (zip-data/action->positional-arguments action)]]
+  (re-frame/reg-event-db
+   action
+   (fn [db _]
+     (let [{:keys [inputs]} db
+           arguments (->> inputs action (mapv :parsed))
+           new-loc (apply (get zip-data/action->zip-fn action) arguments)]
+       (-> db
+           (conj-new-loc new-loc)
+           (save-the-action action arguments))))))
 
 (re-frame/reg-event-db
  :set-index

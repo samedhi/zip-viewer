@@ -6,7 +6,9 @@
    [zip-viewer.zip-data :as zip-data]))
 
 (def constructor-grid
-  [[:vector-zip]])
+  [[:seq-zip]
+   [:vector-zip]
+   [:xml-zip]])
 
 (def grid
   [[:up]
