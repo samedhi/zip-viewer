@@ -12,12 +12,12 @@
  (fn [_ _]
    config/default-db))
 
-(defn save-the-action [loc action arguments]
-  (with-meta
-    loc
-    (assoc (meta loc)
-           :action-str
-           (util/build-action-str action arguments))))
+(defn save-the-action [db action arguments]
+  (let [{:keys [index]} db]
+    (assoc-in
+     db
+     [:log index :action-string]
+     (util/build-action-str action arguments))))
 
 (defn try-to-read-string [v]
   (try
@@ -61,18 +61,20 @@
      (let [{:keys [inputs index]} db
            loc (get-in db [:log index :loc])
            arguments (->> inputs action (mapv :parsed))
-           new-loc (apply fx loc arguments)
-           new-loc-with-action (save-the-action new-loc action arguments)]
-       (conj-new-loc db new-loc-with-action)))))
+           new-loc (apply fx loc arguments)]
+       (-> db
+           (conj-new-loc new-loc)
+           (save-the-action action arguments))))))
 
 (re-frame/reg-event-db
  :vector-zip
  (fn [db _]
    (let [{:keys [inputs]} db
          arguments (->> inputs :vector-zip (mapv :parsed))
-         new-loc (apply (:vector-zip zip-data/action->zip-fn) arguments)
-         new-loc-with-action (save-the-action new-loc :vector-zip arguments)]
-     (conj-new-loc db new-loc-with-action))))
+         new-loc (apply (:vector-zip zip-data/action->zip-fn) arguments)]
+     (-> db
+         (conj-new-loc new-loc)
+         (save-the-action :vector-zip arguments)))))
 
 (re-frame/reg-event-db
  :set-index

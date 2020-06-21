@@ -5,7 +5,7 @@
    [zip-viewer.mui :as mui]
    [zip-viewer.mui-icons :as mui-icons]))
 
-(defn row-component [i relative-to-index loc]
+(defn row-component [i relative-to-index action-string loc]
   (let [opened? @(re-frame/subscribe [:opened i])]
     [mui/table-row
      {:hover true
@@ -19,13 +19,13 @@
       [mui/icon-button
        {:size :small
         :on-click #(re-frame/dispatch [:flip-opened i])}
-       (if 
-           [mui-icons/keyboard-arrow-up]
+       (if opened?
+         [mui-icons/keyboard-arrow-up]
          [mui-icons/keyboard-arrow-down])]]
      [mui/table-cell
       {:style {:font-weight :inherit
                :color :inherit}}
-      (-> loc meta :action-str)]
+      action-string]
      [mui/table-cell
       {:style {:font-weight :inherit
                :color :inherit}}
@@ -35,17 +35,17 @@
                :color :inherit}}
       (pr-str loc)]]))
 
-(defn preview-row [action-str]
-  [mui/table-row
-   [mui/table-cell ""]
-   [mui/table-cell
-    (or action-str "--")]
-   [mui/table-cell "--"]
-   [mui/table-cell "--"]])
+(defn preview-row []
+  (let [action-string @(re-frame/subscribe [:preview-action-str])]
+    [mui/table-row
+     [mui/table-cell ""]
+     [mui/table-cell
+      (or action-string "--")]
+     [mui/table-cell "--"]
+     [mui/table-cell "--"]]))
 
 (defn component []
-  (let [action-str @(re-frame/subscribe [:preview-action-str])
-        index @(re-frame/subscribe [:index])]
+  (let [index @(re-frame/subscribe [:index])]
     [mui/table-container
      [mui/table
       {:size :small}
@@ -56,8 +56,8 @@
         [mui/table-cell "Focus"]
         [mui/table-cell "Loc"]]]
       [mui/table-body
-       (for [[i {:keys [loc]}] (map-indexed vector @(re-frame/subscribe [:log]))]
+       (for [[i {:keys [loc action-string]}] (map-indexed vector @(re-frame/subscribe [:log]))]
          ^{:key i}
-         [row-component i (compare index i) loc])
-       [preview-row action-str]]]]))
+         [row-component i (compare index i) action-string loc])
+       [preview-row]]]]))
 
