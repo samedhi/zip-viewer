@@ -17,7 +17,7 @@
 
 (re-frame/reg-sub
  :opened
- (fn [db _]
+ (fn [db [_ i]]
    false))
 
 (re-frame/reg-sub

@@ -40,11 +40,12 @@
   (assoc db :inputs (build-initial-inputs)))
 
 (defn conj-new-loc [db new-loc]
-  (let [{:keys [index]} db]
+  (let [{:keys [index]} db
+        new-index (inc index)]
     (-> db
-        (update :locs subvec 0 index)
+        (update :locs subvec 0 new-index)
         (update :locs conj new-loc)
-        (update :index inc)
+        (assoc :index new-index)
         clear-inputs)))
 
 (doseq [[action fx] (reduce dissoc zip-data/action->zip-fn zip-data/constructors)
@@ -53,7 +54,7 @@
    action
    (fn [db _]
      (let [{:keys [locs inputs index]} db
-           loc (nth locs (dec index))
+           loc (nth locs index)
            arguments (->> inputs action (mapv :parsed))
            new-loc (apply fx loc arguments)
            new-loc-with-action (save-the-action new-loc action arguments)]

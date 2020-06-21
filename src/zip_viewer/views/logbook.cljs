@@ -55,7 +55,7 @@
         [mui/table-cell "Focus"]
         [mui/table-cell "Loc"]]]
       [mui/table-body
-       (for [[i loc] (map-indexed (fn [i v] [(inc i) v]) @(re-frame/subscribe [:locs]))]
+       (for [[i loc] (map-indexed vector @(re-frame/subscribe [:locs]))]
          ^{:key i}
          [row-component i (compare index i) loc])
        [preview-row action-str]]]]))

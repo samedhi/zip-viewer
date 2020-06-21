@@ -9,4 +9,4 @@
 
 (def default-db
   {:locs []
-   :index 0})
+   :index -1})
