@@ -42,12 +42,12 @@
        {:style {:font-weight :inherit
                 :color :inherit
                 :border-bottom "0"}}
-       (pr-str (zip/node loc))]
+       (if loc (pr-str (zip/node loc)) "???")]
       [mui/table-cell
        {:style {:font-weight :inherit
                 :color :inherit
                 :border-bottom "0"}}
-       (pr-str (zip/root loc))]]
+       (if loc (pr-str (zip/root loc)) "???")]]
      [row-drawer opened? loc]]))
 
 (defn preview-row []
