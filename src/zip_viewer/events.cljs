@@ -84,7 +84,7 @@
 (re-frame/reg-event-db
  :flip-opened
  (fn [db [_ i]]
-   (println "I would have flipped this arrow")))
+   (update-in db [:log i :opened?] (fnil not false))))
 
 (defn attempt-to-parse-value [db action i value]
   (if-let [v (try-to-read-string value)]

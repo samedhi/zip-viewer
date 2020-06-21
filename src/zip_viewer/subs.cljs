@@ -18,7 +18,7 @@
 (re-frame/reg-sub
  :opened
  (fn [db [_ i]]
-   false))
+   (-> db :log (get i) :opened?)))
 
 (re-frame/reg-sub
  :preview-action-str
