@@ -10,7 +10,7 @@
 
 (def grid
   [[:up]
-   [:left :replace :right]
+   [:leftmost :left :replace :right :rightmost]
    [:down]])
 
 (defn action-button [options]

@@ -3,7 +3,9 @@
 
 (def action->zip-fn
   {:left zip/left
+   :leftmost zip/leftmost
    :right zip/right
+   :rightmost zip/rightmost
    :up zip/up
    :down zip/down
    :replace zip/replace
