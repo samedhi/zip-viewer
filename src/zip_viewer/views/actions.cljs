@@ -10,10 +10,18 @@
    [:vector-zip]
    [:xml-zip]])
 
-(def grid
-  [[:up]
-   [:leftmost :left :replace :right :rightmost]
-   [:down]])
+(def section
+  [{:name "Movement"
+    :grid [[:up]
+           [:leftmost :left :right :rightmost]
+           [:down]]}
+   {:name "Traversal"
+    :grid [[:prev :end? :next]]}
+   {:name "Data"
+    :grid [[:branch? :children :lefts :node :path :rights :root]]}
+   {:name "Modify"
+    :grid [[:insert-left :remove :replace  :insert-right]
+           [:insert-child :append-child]]}])
 
 (defn action-button [options]
   (let [{:keys [action constructor? can-be-clicked? variant]} options
@@ -66,27 +74,33 @@
 
 (defn render-actions [grid]
   [mui/grid
-   {:container true}
+   {:container true
+    :style {:padding-top "2rem"}}
    (doall
-    (for [row grid]
-      ^{:key (pr-str row)}
+    (for [{:keys [grid name]} section]
       [mui/grid
-       {:container true
-        :justify :space-evenly
-        :item true
-        :style {:padding "0.25rem 0"}}
+       {:container true}
+       [mui/typography {:variant :h4} name]
        (doall
-        (for [col row]
-          ^{:key col}
+        (for [row grid]
+          ^{:key (pr-str row)}
           [mui/grid
-           {:item true
-            :align :center
-            :style {:min-width "5rem"}}
-           (action-component col)]))]))])
+           {:container true
+            :justify :space-evenly
+            :item true
+            :style {:padding "0.25rem 0"}}
+           (doall
+            (for [col row]
+              ^{:key col}
+              [mui/grid
+               {:item true
+                :align :center
+                :style {:min-width "5rem"}}
+               (action-component col)]))]))]))])
 
 (defn component []
   (let [we-have-a-loc? (not @(re-frame/subscribe [:log-empty?]))]
     [render-actions
      (if we-have-a-loc?
-       grid
+       section
        constructor-grid)]))
