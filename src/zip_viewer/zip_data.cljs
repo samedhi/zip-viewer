@@ -44,6 +44,16 @@
    :xml-zip ["root"]
    :zipper ["branch?" "children" "make-node" "root"]})
 
+(def does-not-return-loc
+  #{:end?
+    :branch?
+    :children
+    :lefts
+    :node
+    :path
+    :rights
+    :root})
+
 (def constructors
   #{:seq-zip
     :vector-zip

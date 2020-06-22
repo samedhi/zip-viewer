@@ -37,7 +37,7 @@
  :<- [:log]
  :<- [:index]
  (fn [[log index] _]
-   (:loc (get log index))))
+   (:loc (nth log index))))
 
 (re-frame/reg-sub
  :log

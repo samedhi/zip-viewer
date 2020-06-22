@@ -5,10 +5,11 @@
    [zip-viewer.util :as util]
    [zip-viewer.zip-data :as zip-data]))
 
-(def constructor-grid
-  [[:seq-zip]
-   [:vector-zip]
-   [:xml-zip]])
+(def constructor-section
+  [{:name "Contructors"
+    :grid [[:seq-zip]
+           [:vector-zip]
+           [:xml-zip]]}])
 
 (def section
   [{:name "Movement"
@@ -60,6 +61,24 @@
                                          (re-frame/dispatch [:set-argument-value action i v]))
                            :value @(re-frame/subscribe [:argument-value action i])}]))]]]))
 
+(defn terminal-action [options]
+  (let [{:keys [action arguments can-be-clicked?]} options
+        action-str @(re-frame/subscribe [:action-str action])
+        loc @(re-frame/subscribe [:loc])
+        fx (zip-data/action->zip-fn action)
+        _ (println :terminal-action action action-str loc fx)
+        result (try
+                 (fx loc)
+                 (catch :default e
+                   (js/console.warn "I wasn't able to call" (pr-str action) "on" (pr-str loc))
+                   (js/console.warn e)
+                   "???"))]
+    [mui/paper
+     {:style {:padding "0.4rem"}}
+     [mui/grid
+      {:container true}
+      [mui/typography (str action-str " => " (pr-str result))]]]))
+
 (defn action-component [action]
   (let [arguments (zip-data/action->positional-arguments action)
         constructor? (contains? zip-data/constructors action)
@@ -68,16 +87,18 @@
                  :arguments arguments
                  :contructor? constructor?
                  :can-be-clicked? can-be-clicked?}]
-    (if (seq arguments)
-      [action-with-arguments options]
-      [action-with-no-arguments options])))
+    (cond
+      (contains? zip-data/does-not-return-loc action) [terminal-action options]
+      (seq arguments) [action-with-arguments options]
+      :else [action-with-no-arguments options])))
 
-(defn render-actions [grid]
+(defn render-actions [section]
   [mui/grid
    {:container true
     :style {:padding-top "2rem"}}
    (doall
     (for [{:keys [grid name]} section]
+      ^{:key name}
       [mui/grid
        {:container true}
        [mui/typography {:variant :h4} name]
@@ -99,8 +120,8 @@
                (action-component col)]))]))]))])
 
 (defn component []
-  (let [we-have-a-loc? (not @(re-frame/subscribe [:log-empty?]))]
+  (let [log-empty? @(re-frame/subscribe [:log-empty?])]
     [render-actions
-     (if we-have-a-loc?
-       section
-       constructor-grid)]))
+     (if log-empty?
+       constructor-section
+       section)]))
