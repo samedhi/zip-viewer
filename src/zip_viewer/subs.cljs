@@ -33,6 +33,13 @@
      (build-action-string action inputs))))
 
 (re-frame/reg-sub
+ :loc
+ :<- [:log]
+ :<- [:index]
+ (fn [[log index] _]
+   (:loc (get log index))))
+
+(re-frame/reg-sub
  :log
  (fn [db _]
    (:log db)))
