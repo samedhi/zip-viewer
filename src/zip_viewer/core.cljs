@@ -14,7 +14,7 @@
 
 (defn ^:after-load init []
   (re-frame/clear-subscription-cache!)
-  (breakpoints/init)
+  ;; (breakpoints/init)
   (mount-root)
   :success)
 
