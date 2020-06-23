@@ -3,7 +3,8 @@
    [clojure.zip :as zip]
    [re-frame.core :as re-frame]
    [zip-viewer.mui :as mui]
-   [zip-viewer.mui-icons :as mui-icons]))
+   [zip-viewer.mui-icons :as mui-icons]
+   [zip-viewer.util :as util]))
 
 (defn row-drawer [opened? loc]
   [mui/table-row
@@ -11,7 +12,7 @@
     [mui/collapse {:in opened? :timeout :auto :unmount-on-exit true}
      [:pre {:class "code-block"
             :style {:padding "1rem"}}
-      (with-out-str (cljs.pprint/pprint loc))]]]])
+      (util/pprint loc)]]]])
 
 (defn row-component [i relative-to-index action-string loc]
   (let [opened? @(re-frame/subscribe [:opened i])]

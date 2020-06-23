@@ -3,7 +3,8 @@
    [re-frame.core :as re-frame]
    [zip-viewer.mui :as mui]
    [zip-viewer.views.actions :as actions]
-   [zip-viewer.views.logbook :as logbook]))
+   [zip-viewer.views.logbook :as logbook]
+   [zip-viewer.util :as util]))
 
 (defn code-block [o]
   [:pre {:class "code-block"}
@@ -12,7 +13,7 @@
 (re-frame/reg-sub
  ::pretty-print-db
  (fn [db]
-   (with-out-str (cljs.pprint/pprint db))))
+   (util/pprint db)))
 
 (defn title []
   [mui/typography
