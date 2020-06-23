@@ -24,6 +24,6 @@
 (defn component []
   [mui/container
    {:max-width "xl"}
-   [logbook/component]
    [actions/component]
+   [logbook/component]
    [app-db-viewer]])

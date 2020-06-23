@@ -70,9 +70,9 @@
         [mui/table-cell "Action"]
         [mui/table-cell "zip/node"]
         [mui/table-cell "zip/root"]]]
+      ;; [preview-row]
       [mui/table-body
-       (for [[i {:keys [loc action-string]}] (map-indexed vector @(re-frame/subscribe [:log]))]
+       (for [[i {:keys [loc action-string]}] (reverse (map-indexed vector @(re-frame/subscribe [:log])))]
          ^{:key i}
-         [row-component i (compare index i) action-string loc])
-       [preview-row]]]]))
+         [row-component i (compare index i) action-string loc])]]]))
 
