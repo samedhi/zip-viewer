@@ -14,9 +14,16 @@
  (fn [db]
    (with-out-str (cljs.pprint/pprint db))))
 
+(defn title []
+  [mui/typography
+   {:variant :h2
+    :align :center}
+   "clojure.zip/viewer"])
+
 (defn app-db-viewer []
   (let [db @(re-frame/subscribe [::pretty-print-db])]
     [mui/card
+     {:style {:margin "1rem 0"}}
      [mui/card-content
       [mui/typography {:color "textSecondary"} "Content of app-db is:"]
       [code-block db]]]))
@@ -24,6 +31,7 @@
 (defn component []
   [mui/container
    {:max-width "xl"}
+   [title]
    [actions/component]
    [logbook/component]
    [app-db-viewer]])

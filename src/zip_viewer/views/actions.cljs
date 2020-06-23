@@ -12,18 +12,18 @@
            [:xml-zip]]}])
 
 (def section
-  [{:name "Movement"
-    :grid [[:up]
-           [:leftmost :left :right :rightmost]
-           [:down]]}
-   {:name "Traversal"
-    :grid [[:prev :end? :next]]}
-   {:name "Data"
+  [{:name "Data"
     :grid [[:branch?]
            [:path]
            [:lefts]
            [:rights]
            [:children]]}
+   {:name "Movement"
+    :grid [[:up]
+           [:leftmost :left :right :rightmost]
+           [:down]]}
+   {:name "Traversal"
+    :grid [[:prev :end? :next]]}
    {:name "Modify"
     :grid [[:insert-left :remove :replace  :insert-right]
            [:insert-child :append-child]]}])
@@ -34,7 +34,7 @@
     [mui/button
      {:full-width true
       :variant variant
-      :style {:text-transform :none}
+      :style {:text-transform :none :background-color "white"}
       :color (if can-be-clicked? :primary :default)
       :disabled (not can-be-clicked?)
       :on-click (when can-be-clicked? #(re-frame/dispatch [action]))
@@ -78,7 +78,8 @@
                    (js/console.warn e)
                    "???"))]
     [mui/paper
-     {:style {:padding "0.4rem"}}
+     {:style {:padding "0.4rem"}
+      :variant :outlined}
      [mui/grid
       {:container true}
       [mui/typography (str action-str " => " (pr-str result))]]]))
@@ -105,7 +106,7 @@
       ^{:key name}
       [mui/grid
        {:container true}
-       [mui/typography {:variant :h4} name]
+       [mui/typography {:variant :h5} name]
        (doall
         (for [row grid]
           ^{:key (pr-str row)}

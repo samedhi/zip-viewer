@@ -67,20 +67,22 @@
 (defn component []
   (let [index @(re-frame/subscribe [:index])
         log @(re-frame/subscribe [:log])]
-    [mui/table-container
-     [mui/table
-      {:size :small}
-      [mui/table-head
-       [mui/table-row
-        [mui/table-cell ""]
-        [mui/table-cell "Step"]
-        [mui/table-cell "Action"]
-        [mui/table-cell "zip/node"]
-        [mui/table-cell "zip/root"]]]
-      (when (empty? log)
-        [preview-row])
-      [mui/table-body
-       (for [[i {:keys [loc action-string]}] (reverse (map-indexed vector log))]
-         ^{:key i}
-         [row-component i (compare index i) action-string loc])]]]))
+    [mui/paper
+     [mui/table-container
+      {:style {:margin "1rem 0"}}
+      [mui/table
+       {:size :small}
+       [mui/table-head
+        [mui/table-row
+         [mui/table-cell ""]
+         [mui/table-cell "Step"]
+         [mui/table-cell "Action"]
+         [mui/table-cell "zip/node"]
+         [mui/table-cell "zip/root"]]]
+       (when (empty? log)
+         [preview-row])
+       [mui/table-body
+        (for [[i {:keys [loc action-string]}] (reverse (map-indexed vector log))]
+          ^{:key i}
+          [row-component i (compare index i) action-string loc])]]]]))
 
