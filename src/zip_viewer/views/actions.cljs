@@ -19,7 +19,11 @@
    {:name "Traversal"
     :grid [[:prev :end? :next]]}
    {:name "Data"
-    :grid [[:branch? :children :lefts :node :path :rights :root]]}
+    :grid [[:branch?]
+           [:path]
+           [:lefts]
+           [:rights]
+           [:children]]}
    {:name "Modify"
     :grid [[:insert-left :remove :replace  :insert-right]
            [:insert-child :append-child]]}])

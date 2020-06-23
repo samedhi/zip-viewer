@@ -68,8 +68,8 @@
        [mui/table-row
         [mui/table-cell ""]
         [mui/table-cell "Action"]
-        [mui/table-cell "Focus"]
-        [mui/table-cell "Root"]]]
+        [mui/table-cell "zip/node"]
+        [mui/table-cell "zip/root"]]]
       [mui/table-body
        (for [[i {:keys [loc action-string]}] (map-indexed vector @(re-frame/subscribe [:log]))]
          ^{:key i}
