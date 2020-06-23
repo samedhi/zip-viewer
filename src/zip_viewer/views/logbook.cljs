@@ -60,7 +60,8 @@
      [mui/table-cell "--"]]))
 
 (defn component []
-  (let [index @(re-frame/subscribe [:index])]
+  (let [index @(re-frame/subscribe [:index])
+        log @(re-frame/subscribe [:log])]
     [mui/table-container
      [mui/table
       {:size :small}
@@ -70,9 +71,10 @@
         [mui/table-cell "Action"]
         [mui/table-cell "zip/node"]
         [mui/table-cell "zip/root"]]]
-      ;; [preview-row]
+      (when (empty? log)
+        [preview-row])
       [mui/table-body
-       (for [[i {:keys [loc action-string]}] (reverse (map-indexed vector @(re-frame/subscribe [:log])))]
+       (for [[i {:keys [loc action-string]}] (reverse (map-indexed vector log))]
          ^{:key i}
          [row-component i (compare index i) action-string loc])]]]))
 
