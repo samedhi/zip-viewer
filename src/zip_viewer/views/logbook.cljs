@@ -7,7 +7,7 @@
 
 (defn row-drawer [opened? loc]
   [mui/table-row
-   [mui/table-cell {:col-span 4 :style {:padding-bottom 0 :padding-top 0}}
+   [mui/table-cell {:col-span 5 :style {:padding-bottom 0 :padding-top 0}}
     [mui/collapse {:in opened? :timeout :auto :unmount-on-exit true}
      [:pre {:class "code-block"
             :style {:padding "1rem"}}
@@ -33,6 +33,11 @@
         (if opened?
           [mui-icons/keyboard-arrow-up]
           [mui-icons/keyboard-arrow-down])]]
+      [mui/table-cell
+       {:style {:font-weight :inherit
+                :color :inherit
+                :border-bottom "0"}}
+       (inc i)]
       [mui/table-cell
        {:style {:font-weight :inherit
                 :color :inherit
@@ -68,6 +73,7 @@
       [mui/table-head
        [mui/table-row
         [mui/table-cell ""]
+        [mui/table-cell "Step"]
         [mui/table-cell "Action"]
         [mui/table-cell "zip/node"]
         [mui/table-cell "zip/root"]]]
