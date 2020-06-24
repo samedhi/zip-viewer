@@ -13,3 +13,5 @@ pom.xml.asc
 .nrepl-port
 .cpcache/
 /.rebel_readline_history
+/production/
+/.firebase/
