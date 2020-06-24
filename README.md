@@ -1,4 +1,4 @@
-# Clojure.zip Viewer
+# Clojure.Zip Viewer
 
 ## Usage
 
@@ -25,6 +25,33 @@ Every function in `clojure.zip` is supported except for `(edit)` & `(zipper)` (s
 Also, if you have ideas about how to make the UI better (or any ideas in general), I appreciate constructive feedback.
 
 Thank you.
+
+## Development
+
+This project uses [figwheel.main](https://figwheel.org/docs/) for development. Assuming that is setup then clone this project and cd into it.
+
+```
+>> git clone git@github.com:samedhi/zip-viewer.git
+>> cd zip-viewer
+```
+
+Then proceed using either the console or emacs.
+
+### Console
+
+```
+>> clj -m figwheel.main -b dev
+```
+
+### Emacs
+```
+emacs src/zip-viewer/core.cljs
+```
+From within emacs, type `M-x cider-jack-in-cljs` and then `Enter`. `figwheel-main` is your environment and `dev` is your build.
+
+### Result
+
+After a little time a browser will open with the app loaded within it. Editing any of the files under `/src` or the `resources/public/css/style.css` file should cause those files to be live-reloaded upon save. For more information please read the [figwheel.main](https://figwheel.org/docs/) docs (they are quite good).
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
