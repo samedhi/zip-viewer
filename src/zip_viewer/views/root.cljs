@@ -29,10 +29,20 @@
       [mui/typography {:color "textSecondary"} "Content of app-db is:"]
       [code-block db]]]))
 
+(defn footer []
+  [mui/grid
+   {:class "footer"}
+   [mui/grid
+    [mui/link {:href "https://samedhi.github.io/"} "Stephen Cagle"]
+    [mui/link {:href "https://github.com/samedhi"} "@github"]
+    [mui/link {:href "https://www.linkedin.com/in/stephen-cagle-92b895102/"} "@linkedin"]]
+   [mui/typography "Copyright 2020"]])
+
 (defn component []
   [mui/container
    {:max-width "xl"}
    [title]
    [actions/component]
    [logbook/component]
-   [app-db-viewer]])
+   [app-db-viewer]
+   [footer]])

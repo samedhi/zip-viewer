@@ -39,6 +39,7 @@
 (def grid-list  (mui->reagent "GridList"))
 (def icon-button  (mui->reagent "IconButton"))
 (def linear-progress  (mui->reagent "LinearProgress"))
+(def link (mui->reagent "Link"))
 (def list  (mui->reagent "List"))
 (def list-item  (mui->reagent "ListItem"))
 (def menu  (mui->reagent "Menu"))
